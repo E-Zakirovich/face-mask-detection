@@ -174,4 +174,4 @@ pyrightconfig.json
 *.iml
 
 # Datasets (too large for git — keep local)
-data/z
+data/
