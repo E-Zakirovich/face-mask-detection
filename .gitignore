@@ -174,13 +174,4 @@ pyrightconfig.json
 *.iml
 
 # Datasets (too large for git — keep local)
-data/
-
-# YOLO / Ultralytics training outputs
-runs/
-weights/
-*.pt
-*.onnx
-*.pth
-
-
+data/z
