@@ -1,0 +1,38 @@
+# configs/train_config.yaml
+# Training hyperparameters for face-mask-detection (YOLOv8)
+# Tuned for a small dataset (~853 images) on a MacBook Air M2 (MPS backend)
+
+# --- Model ---
+model: yolov8n.pt          # Nano variant — fastest, lowest memory. Good starting point
+                            # before trying yolov8s.pt if accuracy needs improve.
+
+# --- Data ---
+data: data/dataset.yaml    # Path to the dataset manifest (created in split.py stage)
+
+# --- Core training params ---
+epochs: 100                # Small dataset -> rely on early stopping (patience) rather
+                            # than a low epoch count, so the model has room to converge.
+batch: 8                   # Conservative for M2 unified memory (8-16GB shared CPU/GPU).
+imgsz: 640                 # YOLOv8 default. Drop to 416 if training is too slow on MPS.
+patience: 20                # Stop early if val mAP doesn't improve for 20 epochs.
+
+# --- Optimizer ---
+optimizer: auto             # Let YOLOv8 auto-select (SGD vs AdamW) based on training config.
+lr0: 0.01                   # Initial learning rate — YOLOv8 default, don't touch until
+                            # you have a working baseline to compare against.
+
+# --- Hardware ---
+device: mps                 # Apple Silicon GPU backend. Falls back to CPU if unavailable.
+workers: 4                  # Low worker count — no heavy multi-core data pipeline needed
+                            # for a dataset this size.
+
+# --- Reproducibility ---
+seed: 42                    # Fixed seed so runs are comparable across experiments.
+
+# --- Output organization ---
+project: outputs/plots      # Where run folders (weights, logs, curves) get saved.
+name: face_mask_run          # Subfolder name for this specific run.
+exist_ok: false              # Set true only if you intentionally want to overwrite a run.
+
+# --- Validation ---
+val: true                    # Run validation each epoch (needed for early stopping + mAP).
