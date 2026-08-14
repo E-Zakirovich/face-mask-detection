@@ -111,6 +111,14 @@ class Annotations:
             print(f"  [skip] Missing <{lines}> element in {self.xml_path}")
             return False
 
+        # make new name for new file
+        base_name = os.path.splitext(os.path.basename(self.xml_path))[0]
+        out_path = os.path.join(self.labels, base_name + ".txt")
+
+        # store new file to out_path
+        with open(out_path, "w") as f:
+            f.write("\n".join(lines))
+
         return True
 
 
