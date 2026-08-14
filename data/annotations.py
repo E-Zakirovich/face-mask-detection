@@ -12,5 +12,7 @@ import os
 
 
 class Annotations:
-    def __init__(self, xml_path):
+    def __init__(self, xml_path : str, classes : list, class_to_idx : dict):
         self.xml_path = xml_path
+        self.classes = classes
+        self.class_to_idx = class_to_idx
