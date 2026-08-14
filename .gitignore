@@ -173,5 +173,5 @@ pyrightconfig.json
 .idea/
 *.iml
 
-# Datasets (too large for git — keep local)
-data/
+data/annotations 
+data/images
