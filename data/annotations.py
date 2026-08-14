@@ -82,7 +82,32 @@ class Annotations:
             x_maximum = float(x_max) if x_max is not None else None
             y_maximum = float(y_max) if y_max is not None else None
 
-            
+
+            # Guard against any missing coordinates
+            if (
+                    x_minimum is None
+                    or y_minimum is None
+                    or x_maximum is None
+                    or y_maximum is None
+            ):
+                continue
+
+            # Make sure box dimensions are valid
+            if x_maximum <= x_minimum or y_maximum <= y_minimum:
+                print(f"  [skip] Invalid bounding box in {self.xml_path}")
+                continue
+
+            # Get centers
+            x_center = (x_minimum + x_maximum) / 2 / img_width
+            y_center = (y_minimum + y_maximum) / 2 / img_height
+            width = (x_maximum - x_minimum) / img_width
+            height = (y_maximum - y_minimum) / img_height
+
+            lines.append(f"{class_id} {x_center} {y_center} {width} {height}")
+
+        if not lines:
+            print(f"  [skip] Missing <{lines}> element in {self.xml_path}")
+            return False
 
         return True
 
