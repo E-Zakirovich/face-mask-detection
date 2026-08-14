@@ -41,7 +41,7 @@ class Annotations:
             print(f"  [skip] Missing width/height values in {xml_path}")
             return False
 
-        # PyCharm now knows width_text and height_text are non-None strings
+        # convert coordinate variables into integer variables
         img_width = int(width_text)
         img_height = int(height_text)
 
@@ -103,8 +103,10 @@ class Annotations:
             width = (x_maximum - x_minimum) / img_width
             height = (y_maximum - y_minimum) / img_height
 
+            # get the final bounding boxes
             lines.append(f"{class_id} {x_center} {y_center} {width} {height}")
 
+        # final check for lines list
         if not lines:
             print(f"  [skip] Missing <{lines}> element in {self.xml_path}")
             return False
