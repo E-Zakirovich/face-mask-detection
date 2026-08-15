@@ -31,5 +31,25 @@ class Train:
             print("Loading YOLO model...")
         self.model = YOLO.load_model(self.model_path)
 
-    def train(self):
-        ...
+    """
+    following method will help me to train my model.
+    I also used encapsulation method in order to for 
+    safety.
+    """
+    def __train(self):
+
+        if self.verbose:
+            print("Training is started...")
+
+            # training YOLO model
+            results = self.model.train(
+                dataset=self.data_yaml, # yaml dataset to find the data
+                epochs=self.epochs, # the number of epochs
+                image_size=self.image_size, # the size of the image
+            )
+
+            print("Training is finished...")
+
+            return results # final results are sent to main
+
+        return None
