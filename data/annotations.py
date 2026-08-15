@@ -14,21 +14,21 @@ import xml.etree.ElementTree as Et
 
 
 class Annotations:
-    def __init__(self, xml_path : str, labels : str, classes : list, class_to_idx : dict, verbose : bool):
+    def __init__(self, xml_path : str, labels : str, classes : list, class_to_id : dict, verbose : bool):
         self.xml_path = xml_path
         self.classes = classes
-        self.class_to_id = class_to_idx
+        self.class_to_id = class_to_id
         self.labels = labels
         self.verbose = verbose
 
-    def __convertor(self):
-        tree = Et.parse(self.xml_path)
+    def __convertor(self, file_path):
+        tree = Et.parse(file_path)
         root = tree.getroot()
 
         # size settings
         size = root.find("size")
         if size is None:
-            print(f"  [skip] Missing <{size}> element in {xml_path}")
+            print(f"  [skip] Missing <{size}> element in {file_path}")
             return False
 
         width_elem = size.find("width")
@@ -39,7 +39,7 @@ class Annotations:
         height_text = height_elem.text if height_elem is not None else None
 
         if not width_text or not height_text:
-            print(f"  [skip] Missing width/height values in {xml_path}")
+            print(f"  [skip] Missing width/height values in {file_path}")
             return False
 
         # convert coordinate variables into integer variables
@@ -62,7 +62,7 @@ class Annotations:
             # get bounding box part
             bounding_box = obj.find("bndbox")
             if bounding_box is None:
-                print(f"  [skip] Missing <{bounding_box}> element in {xml_path}")
+                print(f"  [skip] Missing <{bounding_box}> element in {file_path}")
                 return False
 
             # bounding box settings
@@ -95,7 +95,7 @@ class Annotations:
 
             # Make sure box dimensions are valid
             if x_maximum <= x_minimum or y_maximum <= y_minimum:
-                print(f"  [skip] Invalid bounding box in {self.xml_path}")
+                print(f"  [skip] Invalid bounding box in {file_path}")
                 continue
 
             # Get centers
@@ -109,11 +109,11 @@ class Annotations:
 
         # final check for lines list
         if not lines:
-            print(f"  [skip] Missing <{lines}> element in {self.xml_path}")
+            print(f"  [skip] Missing <{lines}> element in {file_path}")
             return False
 
         # make new name for new file
-        base_name = os.path.splitext(os.path.basename(self.xml_path))[0]
+        base_name = os.path.splitext(os.path.basename(file_path))[0]
         out_path = os.path.join(self.labels, base_name + ".txt")
 
         # store new file to out_path
@@ -129,9 +129,8 @@ class Annotations:
     """
     def convert(self):
 
-        self.verbose = True
         annotations_path = self.xml_path # path of annotations
-        os.makedirs(self.xml_path, exist_ok=True) # making a path for annotations
+        # os.makedirs(self.xml_path, exist_ok=True) # making a path for annotations
 
         # here I am storing all path of .xml file inside of annotations_path which is actually ends with .xml!
         xml_files = [f for f in os.listdir(annotations_path) if f.endswith(".xml")]
@@ -149,7 +148,7 @@ class Annotations:
 
             # I used try catch to avoid stop the program when there is a static error
             try:
-                convert = self.__convertor() #
+                convert = self.__convertor(file_path = path) # convertor for single file
                 if convert:
                     converted += 1
                 else:
