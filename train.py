@@ -53,3 +53,11 @@ class Train:
             return results # final results are sent to main
 
         return None
+
+    """
+    I created new public method, it will load __train() method
+    and send it to main. 
+    """
+    def train(self):
+        result = self.__train()
+        return result
