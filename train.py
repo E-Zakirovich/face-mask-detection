@@ -18,8 +18,18 @@ class Train:
         self.verbose = verbose
         self.model = None
 
-    def load_model(self):
-        ...
+    """
+    load model method will help me to load YOLO model
+    without  trouble. First it will check  the status
+    and then will help me to load it.
+    
+    I used encapsulation method in order to hide some 
+    methods.
+    """
+    def __load_model(self):
+        if self.model_path:
+            print("Loading YOLO model...")
+        self.model = YOLO.load_model(self.model_path)
 
     def train(self):
         ...
