@@ -29,7 +29,8 @@ class Train:
     def __load_model(self):
         if self.model_path:
             print("Loading YOLO model...")
-        self.model = YOLO.load_model(self.model_path)
+        self.model = YOLO(self.model_path)
+
 
     """
     following method will help me to train my model.
@@ -41,23 +42,22 @@ class Train:
         if self.verbose:
             print("Training is started...")
 
-            # training YOLO model
-            results = self.model.train(
-                dataset=self.data_yaml, # yaml dataset to find the data
-                epochs=self.epochs, # the number of epochs
-                image_size=self.image_size, # the size of the image
-            )
+        # training YOLO model
+        results = self.model.train(
+            data = self.data_yaml, # yaml dataset to find the data
+            epochs = self.epochs, # the number of epochs
+            imgsz = self.image_size, # the size of the image
+        )
 
-            print("Training is finished...")
+        print("Training is finished...")
 
-            return results # final results are sent to main
-
-        return None
+        return results # final results are sent to main
 
     """
     I created new public method, it will load __train() method
     and send it to main. 
     """
     def train(self):
+        self.__load_model()
         result = self.__train()
         return result
