@@ -175,3 +175,7 @@ pyrightconfig.json
 
 data/annotations 
 data/images
+runs/
+yolov8n.pt
+data/labels
+data/labels.cache
